@@ -4,11 +4,13 @@ import { useQuery } from 'react-query';
 import Item from './Cart/Item/Item';
 import Cart from './Cart/Cart';
 import Drawer from '@material-ui/core/Drawer';
+import Dialog from '@material-ui/core/Dialog';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import RestoreIcon from '@material-ui/icons/Restore';
 import Badge from '@material-ui/core/Badge';
+import ItemDetailDialog from './Cart/ItemDetailDialog/ItemDetailDialog';
 // Styles
 import { Wrapper, StyledButton, StyledAppBar, HeaderTypography } from './App.styles';
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
@@ -29,6 +31,8 @@ const getCheeses = async (): Promise<CartItemType[]> =>
 
 const App = () => {
   const [cartOpen, setCartOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [dialogItem, setDialogItem] = useState<CartItemType>({});
   const [cartItems, setCartItems] = useState([] as CartItemType[]);
   const { data, isLoading, error } = useQuery<CartItemType[]>(
     'cheeses',
@@ -38,6 +42,12 @@ const App = () => {
 
   const getTotalItems = (items: CartItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount, 0);
+
+  const handleOpenDialog = (viewedItem: CartItemType) => {
+    console.log("opening ",viewedItem.id);
+    setDialogItem(viewedItem);
+    setDialogOpen(true);
+  }
 
   const handleAddToCart = (clickedItem: CartItemType) => {
     setCartItems(prev => {
@@ -119,10 +129,23 @@ const App = () => {
         />
       </Drawer>
 
+      <Dialog open={dialogOpen} onClose={()=>setDialogOpen(false)}>
+        <ItemDetailDialog
+          item={dialogItem}
+          cartItems={cartItems}
+          handleAddToCart={handleAddToCart}
+          handleRemoveFromCart={handleRemoveFromCart}
+        />
+      </Dialog>
+
       <Grid container spacing={3}>
         {data?.map(item => (
           <Grid item key={item.id} xs={12} sm={4}>
-            <Item item={item} handleAddToCart={handleAddToCart} />
+            <Item 
+              item={item} 
+              handleAddToCart={handleAddToCart}
+              handleOpenDialog={handleOpenDialog} 
+            />
           </Grid>
         ))}
       </Grid>

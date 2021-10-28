@@ -1,4 +1,5 @@
 import CartItem from './CartItem/CartItem';
+import Button from '@material-ui/core/Button';
 import { Wrapper } from './Cart.styles';
 import { CartItemType } from '../App';
 
@@ -24,7 +25,10 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
           removeFromCart={removeFromCart}
         />
       ))}
-      <h2>Total: ${calculateTotal(cartItems).toFixed(2)}</h2>
+      <div className = "checkOut">
+        <h2>Total: ${calculateTotal(cartItems).toFixed(2)}</h2>
+        <Button variant="contained"> Purchase  </Button>
+      </div>
     </Wrapper>
   );
 };

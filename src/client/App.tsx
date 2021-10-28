@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, UseQueryResult } from 'react-query';
 // Components
 import Item from './Cart/Item/Item';
 import Cart from './Cart/Cart';
@@ -29,16 +29,21 @@ export type CartItemType = {
 const getCheeses = async (): Promise<CartItemType[]> =>
   await (await fetch(`api/cheeses`)).json();
 
+const getHistoryRecords = async (): Promise<any> => {
+  const history = (await fetch(`api/history`)).json();
+  console.log("history: ",history);
+}
+  
+
 const App = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [dialogItem, setDialogItem] = useState<CartItemType>({});
+  const [dialogItem, setDialogItem] = useState<any>();
   const [cartItems, setCartItems] = useState([] as CartItemType[]);
   const { data, isLoading, error } = useQuery<CartItemType[]>(
     'cheeses',
     getCheeses
   );
-  console.log(data);
 
   const getTotalItems = (items: CartItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount, 0);
@@ -93,7 +98,7 @@ const App = () => {
             justify="space-between"
             alignItems="center"
           >
-            <StyledButton>
+            <StyledButton onClick = {()=>getHistoryRecords()}>
               <RestoreIcon />
               <Typography variant="subtitle2">
                 Recent Purchases

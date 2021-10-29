@@ -46,7 +46,7 @@ const App = () => {
     getCheeses
   );
 
-  const { data:historyRecords, isLoading:historyLoading, error:historyError, refetch } = useQuery<CartItemType[]>(
+  const { data:historyRecordsData, isLoading:historyLoading, error:historyError, refetch } = useQuery<CartItemType[]>(
     'history purchases',
     getHistoryRecords,
   );
@@ -93,9 +93,9 @@ const App = () => {
   //Otherwise show prompts of no history
   const handleShowHistory = async() => {
     await refetch();
-    if (historyRecords.length){
+    if ((historyRecordsData||[]).length){
       setShowHistory(true);
-    } else{
+    }else{
       setNoHistoryPrompt(true);
     }
   }
@@ -147,6 +147,7 @@ const App = () => {
         anchor='right' 
         open={cartOpen} 
         onClose={() => setCartOpen(false)}
+        onClick={() => refetch()}
       >
         <Cart
           cartItems={cartItems}
@@ -166,7 +167,7 @@ const App = () => {
       </Dialog>
 
       <Drawer anchor='left' open={showHistory} onClose={() => setShowHistory(false)}>
-        {historyRecords?.map(item=>(
+        {historyRecordsData?.map(item=>(
           <HistoryRecords
             item={item}
             key={item.id}

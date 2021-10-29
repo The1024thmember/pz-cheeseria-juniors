@@ -4,7 +4,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import Item from './Cart/Item/Item';
 import Cart from './Cart/Cart';
 import Drawer from '@material-ui/core/Drawer';
-import Dialog from '@material-ui/core/Dialog';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
@@ -12,6 +11,8 @@ import RestoreIcon from '@material-ui/icons/Restore';
 import Badge from '@material-ui/core/Badge';
 import ItemDetailDialog from './Cart/ItemDetailDialog/ItemDetailDialog';
 import HistoryRecords from './HistoryRecords/HistoryRecords';
+import Dialog from '@material-ui/core/Dialog';
+import PopUp from './PopUp/PopUp';
 // Styles
 import { Wrapper, StyledButton, StyledAppBar, HeaderTypography } from './App.styles';
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
@@ -39,6 +40,7 @@ const App = () => {
   const [dialogItem, setDialogItem] = useState<any>();
   const [cartItems, setCartItems] = useState([] as CartItemType[]);
   const [showHistory, setShowHistory] = useState(false);
+  const [noHistoryPrompt, setNoHistoryPrompt] = useState(false);
   const { data, isLoading, error } = useQuery<CartItemType[]>(
     'cheeses',
     getCheeses
@@ -86,6 +88,17 @@ const App = () => {
       }, [] as CartItemType[])
     );
   };
+
+  //Fetch history data, if there are purchase history then open Drawer
+  //Otherwise show prompts of no history
+  const handleShowHistory = async() => {
+    await refetch();
+    if (historyRecords.length){
+      setShowHistory(true);
+    } else{
+      setNoHistoryPrompt(true);
+    }
+  }
   
   if (isLoading) return <LinearProgress />;
   if (error) return <div>Something went wrong ...</div>;
@@ -102,7 +115,7 @@ const App = () => {
             justify="space-between"
             alignItems="center"
           >
-            <StyledButton onClick = {()=>setShowHistory(true)}>
+            <StyledButton onClick = {()=>handleShowHistory()}>
               <RestoreIcon />
               <Typography variant="subtitle2">
                 Recent Purchases
@@ -134,12 +147,12 @@ const App = () => {
         anchor='right' 
         open={cartOpen} 
         onClose={() => setCartOpen(false)}
-        onClick={() => refetch()}
       >
         <Cart
           cartItems={cartItems}
           addToCart={handleAddToCart}
           removeFromCart={handleRemoveFromCart}
+          setCartItems={setCartItems}
         />
       </Drawer>
 
@@ -159,7 +172,14 @@ const App = () => {
             key={item.id}
           />
         ))}
-      </Drawer>      
+      </Drawer>   
+
+      <PopUp
+        open= {noHistoryPrompt}
+        onClose = {setNoHistoryPrompt}
+        title = {"Patient Zero's Cheeseria"}
+        content = {"No purchase history found, popluate your chart with amazing cheese now :) !"}
+      />
 
       <Grid container spacing={3}>
         {data?.map(item => (

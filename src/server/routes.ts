@@ -49,10 +49,14 @@ function gethistoryRecords() {
 
 /* Insert new purchase History into backend (history.json) */
 function inserthistoryRecord(newhistoryRecord:object) {
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
     return new Promise((resolve,reject) => {
         try{
             const id =  helper.getNewId(historyRecords)
-            const temp = { "id": id, "goods": newhistoryRecord }
+            const temp = { "id": id, "date":dateTime, "goods": newhistoryRecord }
             historyRecords.push(temp)
             helper.writeJSONFile(filename,historyRecords)
             resolve(temp)

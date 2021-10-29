@@ -1,19 +1,29 @@
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import { useState } from 'react';
 // Types
 import { CartItemType } from '../App';
+import { PurchaseDataType } from '../App';
 // Styles
 import { Wrapper } from './HistoryRecords.styles';
+//Component
+import Record from './Record';
 
 type Props = {
-  item: any;
+  historyRecordsData: PurchaseDataType[]|any;
 };
 
-const HistoryRecords: React.FC<Props> = ({ item }) => {
+const HistoryRecords: React.FC<Props> = ({ historyRecordsData }) => {
 
   return (
     <Wrapper>
-        {item.goods[0].title}
+      <h2> Your Purchase Records</h2>
+      <div className = "container">
+        {historyRecordsData?.map((item:any)=>(
+            <Record
+              item={item}
+              key={item.id}
+            />
+        ))}
+      </div>
     </Wrapper>
   );
 };

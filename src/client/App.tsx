@@ -16,6 +16,7 @@ import PopUp from './PopUp/PopUp';
 // Styles
 import { Wrapper, StyledButton, StyledAppBar, HeaderTypography } from './App.styles';
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
+import { StringMappingType } from 'typescript';
 // Types
 export type CartItemType = {
   id: number;
@@ -27,11 +28,17 @@ export type CartItemType = {
   amount: number;
 };
 
+export type PurchaseDataType = {
+  id: number;
+  date: string;
+  goods: CartItemType;
+};
+
 
 const getCheeses = async (): Promise<CartItemType[]> =>
   await (await fetch(`api/cheeses`)).json();
 
-const getHistoryRecords = async (): Promise<any> => 
+const getHistoryRecords = async (): Promise<PurchaseDataType[]> => 
   await (await fetch(`api/history`)).json();
 
 const App = () => {
@@ -46,7 +53,7 @@ const App = () => {
     getCheeses
   );
 
-  const { data:historyRecordsData, isLoading:historyLoading, error:historyError, refetch } = useQuery<CartItemType[]>(
+  const { data:historyRecordsData, isLoading:historyLoading, error:historyError, refetch } = useQuery<PurchaseDataType[]>(
     'history purchases',
     getHistoryRecords,
   );
@@ -166,13 +173,10 @@ const App = () => {
         />
       </Dialog>
 
-      <Drawer anchor='left' open={showHistory} onClose={() => setShowHistory(false)}>
-        {historyRecordsData?.map(item=>(
-          <HistoryRecords
-            item={item}
-            key={item.id}
-          />
-        ))}
+      <Drawer anchor='left' open={showHistory} onClose={() => setShowHistory(false)}> 
+        <HistoryRecords
+          historyRecordsData = {historyRecordsData}
+        />
       </Drawer>   
 
       <PopUp

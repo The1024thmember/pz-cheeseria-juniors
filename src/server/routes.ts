@@ -43,12 +43,6 @@ router.post('/api/history',  async (req, res) => {
 /* Get all history records from backend (history.json) */
 function gethistoryRecords() {
     return new Promise((resolve, reject) => {
-        if (historyRecords.length === 0) {
-            reject({
-                message: 'no posts available',
-                status: 202
-            })
-        }
         resolve(historyRecords)
     })
 }

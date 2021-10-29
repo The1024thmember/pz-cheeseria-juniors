@@ -44,9 +44,9 @@ const App = () => {
     getCheeses
   );
 
-  const { data:historyRecords, isLoading:historyLoading, error:historyError } = useQuery<CartItemType[]>(
+  const { data:historyRecords, isLoading:historyLoading, error:historyError, refetch } = useQuery<CartItemType[]>(
     'history purchases',
-    getHistoryRecords
+    getHistoryRecords,
   );
 
   const getTotalItems = (items: CartItemType[]) =>
@@ -86,9 +86,11 @@ const App = () => {
       }, [] as CartItemType[])
     );
   };
-
+  
   if (isLoading) return <LinearProgress />;
   if (error) return <div>Something went wrong ...</div>;
+  if (historyLoading) return <LinearProgress />;
+  if (historyError) return <div>Purchase history fetching error.</div>;
   return (
 
     <Wrapper>
@@ -128,7 +130,12 @@ const App = () => {
         </Toolbar>
       </StyledAppBar>
 
-      <Drawer anchor='right' open={cartOpen} onClose={() => setCartOpen(false)}>
+      <Drawer 
+        anchor='right' 
+        open={cartOpen} 
+        onClose={() => setCartOpen(false)}
+        onClick={() => refetch()}
+      >
         <Cart
           cartItems={cartItems}
           addToCart={handleAddToCart}
@@ -146,17 +153,13 @@ const App = () => {
       </Dialog>
 
       <Drawer anchor='left' open={showHistory} onClose={() => setShowHistory(false)}>
-        {historyRecords?.map(item =>(
+        {historyRecords?.map(item=>(
           <HistoryRecords
-            key={item.id}
             item={item}
-            cartItems={cartItems}
-            handleAddToCart={handleAddToCart}
-            handleRemoveFromCart={handleRemoveFromCart}
+            key={item.id}
           />
         ))}
-      </Drawer>
-
+      </Drawer>      
 
       <Grid container spacing={3}>
         {data?.map(item => (

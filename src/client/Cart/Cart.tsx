@@ -23,6 +23,9 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
 
   const putHistory = async() => (await fetch(`/api/history`, purchaseData)).json()
 
+  const handlePurchase = () => {
+    putHistory().then((result)=>{console.log(result)});
+  }
   return (
     <Wrapper>
       <h2>Your Shopping Cart</h2>
@@ -37,9 +40,7 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
       ))}
       <div className = "checkOut">
         <h2>Total: ${calculateTotal(cartItems).toFixed(2)}</h2>
-        <Button onClick = {()=> {
-          putHistory().then((result)=>{console.log(result)});         
-          }} variant="contained"> Purchase  </Button>
+        <Button onClick = {()=> handlePurchase() } variant="contained"> Purchase  </Button>
       </div>
     </Wrapper>
   );

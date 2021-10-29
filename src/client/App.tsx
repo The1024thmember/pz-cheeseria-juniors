@@ -11,6 +11,7 @@ import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import RestoreIcon from '@material-ui/icons/Restore';
 import Badge from '@material-ui/core/Badge';
 import ItemDetailDialog from './Cart/ItemDetailDialog/ItemDetailDialog';
+import HistoryRecords from './HistoryRecords/HistoryRecords';
 // Styles
 import { Wrapper, StyledButton, StyledAppBar, HeaderTypography } from './App.styles';
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
@@ -29,27 +30,29 @@ export type CartItemType = {
 const getCheeses = async (): Promise<CartItemType[]> =>
   await (await fetch(`api/cheeses`)).json();
 
-const getHistoryRecords = async (): Promise<any> => {
-  const history = (await fetch(`api/history`)).json();
-  console.log("history: ",history);
-}
-  
+const getHistoryRecords = async (): Promise<any> => 
+  await (await fetch(`api/history`)).json();
 
 const App = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [dialogItem, setDialogItem] = useState<any>();
   const [cartItems, setCartItems] = useState([] as CartItemType[]);
+  const [showHistory, setShowHistory] = useState(false);
   const { data, isLoading, error } = useQuery<CartItemType[]>(
     'cheeses',
     getCheeses
+  );
+
+  const { data:historyRecords, isLoading:historyLoading, error:historyError } = useQuery<CartItemType[]>(
+    'history purchases',
+    getHistoryRecords
   );
 
   const getTotalItems = (items: CartItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount, 0);
 
   const handleOpenDialog = (viewedItem: CartItemType) => {
-    console.log("opening ",viewedItem.id);
     setDialogItem(viewedItem);
     setDialogOpen(true);
   }
@@ -86,7 +89,6 @@ const App = () => {
 
   if (isLoading) return <LinearProgress />;
   if (error) return <div>Something went wrong ...</div>;
-
   return (
 
     <Wrapper>
@@ -98,7 +100,7 @@ const App = () => {
             justify="space-between"
             alignItems="center"
           >
-            <StyledButton onClick = {()=>getHistoryRecords()}>
+            <StyledButton onClick = {()=>setShowHistory(true)}>
               <RestoreIcon />
               <Typography variant="subtitle2">
                 Recent Purchases
@@ -142,6 +144,19 @@ const App = () => {
           handleRemoveFromCart={handleRemoveFromCart}
         />
       </Dialog>
+
+      <Drawer anchor='left' open={showHistory} onClose={() => setShowHistory(false)}>
+        {historyRecords?.map(item =>(
+          <HistoryRecords
+            key={item.id}
+            item={item}
+            cartItems={cartItems}
+            handleAddToCart={handleAddToCart}
+            handleRemoveFromCart={handleRemoveFromCart}
+          />
+        ))}
+      </Drawer>
+
 
       <Grid container spacing={3}>
         {data?.map(item => (

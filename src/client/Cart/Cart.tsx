@@ -2,7 +2,6 @@ import CartItem from './CartItem/CartItem';
 import Button from '@material-ui/core/Button';
 import { Wrapper } from './Cart.styles';
 import { CartItemType } from '../App';
-
 type Props = {
   cartItems: CartItemType[];
   addToCart: (clickedItem: CartItemType) => void;
@@ -38,7 +37,9 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
       ))}
       <div className = "checkOut">
         <h2>Total: ${calculateTotal(cartItems).toFixed(2)}</h2>
-        <Button onClick = {()=> {console.log(JSON.stringify(cartItems));putHistory().then((result)=>{console.log(result)});}} variant="contained"> Purchase  </Button>
+        <Button onClick = {()=> {
+          putHistory().then((result)=>{console.log(result)});         
+          }} variant="contained"> Purchase  </Button>
       </div>
     </Wrapper>
   );

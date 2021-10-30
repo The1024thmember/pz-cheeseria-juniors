@@ -1,3 +1,14 @@
+/**************************************************************************
+If I have more time, I would try to refactor the HistoryRecords component to 
+make it more robust in handling historical data.For now I will throw a dialog
+to prompt the user if no history record is found. However, because Cypress 
+cannot determine whether an element exists or not, so it will throw error when
+fail to get an element (the prompt dialog), so I'll have to construct two test 
+cases (have history purchase record or not have history purchase record). I 
+hope to refactor my HistoryRecords component in a way that I can combine the 
+two test cases into one.
+****************************************************************************/
+
 /// <reference types="cypress" />
 
 context('Purchase Button Action', () => {

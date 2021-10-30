@@ -54,7 +54,7 @@ const ItemDetailDialog: React.FC<Props> = ({ item, cartItems , handleAddToCart, 
 
   return (
     <Wrapper>
-      <div className = {"innerContainer"}>
+      <div className = {"innerContainer"} data-cy={`cheese-dialog-${item.id}`}>
 
         {/*------------------basic item information ----------------*/}
 
@@ -77,11 +77,11 @@ const ItemDetailDialog: React.FC<Props> = ({ item, cartItems , handleAddToCart, 
 
           <span className = {"itemCounter"}>
             <h5>QUANTITY</h5>
-            <Button onClick={()=>handleRemoveItem()}>
+            <Button onClick={()=>handleRemoveItem()} data-cy={`remove-cheese-${item.id}`}>
               <RemoveIcon />
             </Button>
-            <p>{numberOfItem}</p>
-            <Button onClick={()=>handleAddItem()} >
+            <p data-cy={`cheese-amount-${item.id}`}>{numberOfItem}</p>
+            <Button onClick={()=>handleAddItem()} data-cy={`add-cheese-${item.id}`}>
               <AddIcon />    
             </Button>
           </span>
@@ -96,6 +96,7 @@ const ItemDetailDialog: React.FC<Props> = ({ item, cartItems , handleAddToCart, 
           <h3 className = {"price"}>${item.price*numberOfItem}</h3>
         </div>
         <Button 
+          data-cy={`update-cart-${item.id}`}
           onClick={()=>updateCart()}
         >
           <AddShoppingCartIcon color="action"/>

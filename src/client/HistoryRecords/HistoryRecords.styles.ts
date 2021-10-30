@@ -4,7 +4,8 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   font-family: Arial, Helvetica, sans-serif;
-  width: 500px;
+  min-width: 400px;
+  width: 35vw;
   height: 100%;
   padding: 20px;
   overflow-y: scroll;

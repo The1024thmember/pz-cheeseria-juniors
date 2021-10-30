@@ -1,3 +1,10 @@
+/**********************************************************************************
+ If I have more time I would try to determine a theme and unify all the styles, such
+ as button, border, spacing and coloring, for now all the style values are measured 
+ on a eye-ball level. Besides, I will make the application responsive, for now the
+ website is not very friendly to mobile device. I would also refactor the header put 
+ it into a different file and import it as component.
+**********************************************************************************/
 import React, { useState } from 'react';
 import { useQuery, UseQueryResult } from 'react-query';
 // Components

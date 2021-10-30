@@ -13,7 +13,7 @@ type Props = {
 const Item: React.FC<Props> = ({ item, handleAddToCart, handleOpenDialog }) => (
   <Wrapper >
     
-    <img src={item.image} alt={item.title} onClick={()=> handleOpenDialog(item) } />
+    <img src={item.image} data-cy={`open-dialog-${item.id}`} alt={item.title} onClick={()=> handleOpenDialog(item) } />
 
     <div onClick={()=> handleOpenDialog(item) }>
       <h3>{item.title}</h3>

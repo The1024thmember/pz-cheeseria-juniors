@@ -49,7 +49,7 @@ const Record: React.FC<Props> = ({ item }) => {
             :<></>
           }
         </Grid>     
-        <Grid className = "Amount" item xs={3}>
+        <Grid className = "amount" item xs={3}>
           <h2>{getTotalItems(item.goods)} Items</h2>
         </Grid>
       </Grid>
@@ -61,7 +61,7 @@ const Record: React.FC<Props> = ({ item }) => {
           {showDetail &&
             item.goods.map((each:CartItemType)=>{
               return(
-                <div className = "Detail">
+                <div className = "detail">
                   <div>
                     <img className = "thumbnail" src={each.image} alt={each.title} />
                   </div>
@@ -79,7 +79,7 @@ const Record: React.FC<Props> = ({ item }) => {
 
         {/* ------------- summary data of a purchase history ------------- */}
 
-        <div className="Summary">
+        <div className="summary">
           <div>
             <h5>Total: ${calculateTotal(item.goods)}</h5>
             <h5>Date: {item.date}</h5>

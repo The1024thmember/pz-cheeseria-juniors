@@ -19,12 +19,12 @@ export const Wrapper = styled.div`
     height: 100%;
   };
 
-  .Amount {
+  .amount {
     border-left: 1px solid lightgray;
     text-align: center;
   };
 
-  .Summary {
+  .summary {
     display:flex;
     flex-direction: row;
     justify-content: space-between;
@@ -42,7 +42,7 @@ export const Wrapper = styled.div`
       }
   };
 
-  .Detail {
+  .detail {
         margin-top: 10px;
         display:flex;
         flex-direction: row;

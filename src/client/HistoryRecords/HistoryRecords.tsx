@@ -14,9 +14,9 @@ type Props = {
 const HistoryRecords: React.FC<Props> = ({ historyRecordsData }) => {
 
   return (
-    <Wrapper>
+    <Wrapper >
       <h2> Your Purchase Records</h2>
-      <div className = "container">
+      <div className = "container" data-cy={`purchase-history-container`}>
         {historyRecordsData?.map((item:any)=>(
             <Record
               item={item}

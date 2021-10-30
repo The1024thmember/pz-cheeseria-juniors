@@ -55,6 +55,9 @@ const ItemDetailDialog: React.FC<Props> = ({ item, cartItems , handleAddToCart, 
   return (
     <Wrapper>
       <div className = {"innerContainer"}>
+
+        {/*------------------basic item information ----------------*/}
+
         <div>
           <div className = {'title'}>
             <h2>{item.title}</h2>
@@ -69,6 +72,9 @@ const ItemDetailDialog: React.FC<Props> = ({ item, cartItems , handleAddToCart, 
             </p>
           </div>
           <h2 className = {"price"}>${item.price}</h2>
+
+          {/*------------------add/remove item controller ----------------*/}
+
           <span className = {"itemCounter"}>
             <h5>QUANTITY</h5>
             <Button onClick={()=>handleRemoveItem()}>
@@ -82,6 +88,8 @@ const ItemDetailDialog: React.FC<Props> = ({ item, cartItems , handleAddToCart, 
         </div>
       </div>
         
+      {/*--------------footer: Sum of the current item ----------------*/}
+
       <div className = {"footer"}>
         <div>
           <p >Sum Of This Item</p>
@@ -94,6 +102,7 @@ const ItemDetailDialog: React.FC<Props> = ({ item, cartItems , handleAddToCart, 
           <p>Save</p>
         </Button>
       </div>
+
     </Wrapper>
   );
 };

@@ -15,7 +15,7 @@ router.get('/api/cheeses', (req, res, next) => {
     res.json(cheeses);
 });
 
-/* Get all history API */
+/***************** Get all history API *******************/
 router.get('/api/history', async (req, res) => {
     await gethistoryRecords()
     .then((posts:any) => res.json(posts))
@@ -28,7 +28,7 @@ router.get('/api/history', async (req, res) => {
     })
 })
 
-/* Insert a new history API*/
+/****************** Insert a new history API*************/
 router.post('/api/history',  async (req, res) => {
     await inserthistoryRecord(req.body)
     .then((post:any) => res.status(201).json({
@@ -47,7 +47,7 @@ function gethistoryRecords() {
     })
 }
 
-/* Insert new purchase History into backend (history.json) */
+/*Insert new purchase History into backend (history.json)*/
 function inserthistoryRecord(newhistoryRecord:object) {
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();

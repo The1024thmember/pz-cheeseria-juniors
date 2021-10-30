@@ -12,12 +12,17 @@ type Props = {
 };
 
 const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart, setCartItems }) => {
+
+  //show purchase successful prompt
   const [showPrompt, setShowPrompt] = useState(false);
+
+  //calculate the totl price in Cart
   const calculateTotal = (items: CartItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
 
+  //generate cheeseName x purchase amount, showing in purchase successful prompt
   const cheeseList = (items: CartItemType[]) =>
-    items.map((item: CartItemType)=> `${item.title} * ${item.amount}`);
+    items.map((item: CartItemType)=> `${item.title} x ${item.amount}`);
 
   const purchaseData =  {
     method: 'POST', 
@@ -28,6 +33,7 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart, setCartIt
     body: JSON.stringify(cartItems) 
   }
 
+  //upload purchase info to backend
   const putHistory = async() => (await fetch(`/api/history`, purchaseData)).json()
 
   const handlePurchase = () => {
@@ -47,6 +53,9 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart, setCartIt
   return (
     <Wrapper>
       <h2>Your Shopping Cart</h2>
+
+      {/*------------------show all cart items--------------- */}
+
       {cartItems.length === 0 ? <p>No items in cart.</p> : null}
       {cartItems.map(item => (
         <CartItem
@@ -56,13 +65,25 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart, setCartIt
           removeFromCart={removeFromCart}
         />
       ))}
+
+      {/*------------total price and purchase button ---------- */}
+
       <div className = "checkOut">
         <h2>Total: ${calculateTotal(cartItems).toFixed(2)}</h2>
         {cartItems.length 
-          ?<Button onClick = {()=> handlePurchase() } variant="contained"> Purchase  </Button>
+          ?<Button 
+            onClick = {()=> handlePurchase() } 
+            variant="contained"
+            data-cy={`purchase-button`}
+            > 
+              Purchase  
+            </Button>
           :<></>
         }
       </div>
+
+      {/*------------Prompt for purchase successful ---------- */}
+
       <PopUp
         open={showPrompt}
         onClose={handlePurchaseSuccessful}

@@ -42,17 +42,23 @@ const getHistoryRecords = async (): Promise<PurchaseDataType[]> =>
   await (await fetch(`api/history`)).json();
 
 const App = () => {
+  //open cart
   const [cartOpen, setCartOpen] = useState(false);
+  //open cheese dialog
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  //cheese dialog content
   const [dialogItem, setDialogItem] = useState<any>();
   const [cartItems, setCartItems] = useState([] as CartItemType[]);
   const [showHistory, setShowHistory] = useState(false);
   const [noHistoryPrompt, setNoHistoryPrompt] = useState(false);
+
+  //fetch cheese data
   const { data, isLoading, error } = useQuery<CartItemType[]>(
     'cheeses',
     getCheeses
   );
 
+  //fetch purchase history data
   const { data:historyRecordsData, isLoading:historyLoading, error:historyError, refetch } = useQuery<PurchaseDataType[]>(
     'history purchases',
     getHistoryRecords,
@@ -111,9 +117,13 @@ const App = () => {
   if (error) return <div>Something went wrong ...</div>;
   if (historyLoading) return <LinearProgress />;
   if (historyError) return <div>Purchase history fetching error.</div>;
+
   return (
 
     <Wrapper>
+
+      {/*---------header-------*/}
+
       <StyledAppBar position="static">
         <Toolbar>
           <Grid
@@ -122,18 +132,24 @@ const App = () => {
             justify="space-between"
             alignItems="center"
           >
-            <StyledButton onClick = {()=>handleShowHistory()}>
+            <StyledButton 
+              onClick = {()=>handleShowHistory()}
+              data-cy={`open-history`}
+            >
               <RestoreIcon />
               <Typography variant="subtitle2">
                 Recent Purchases
               </Typography>
             </StyledButton>
 
-            <HeaderTypography variant="h3" noWrap>
+            <HeaderTypography variant="h3" noWrap data-cy={`close-dialog`}>
               Welcome to Patient Zero's Cheeseria
             </HeaderTypography>
 
-            <StyledButton onClick={() => setCartOpen(true)}>
+            <StyledButton 
+              onClick={() => setCartOpen(true)}
+              data-cy={`open-cart`}
+            >
               <Badge
                 badgeContent={getTotalItems(cartItems)}
                 color='error'
@@ -150,6 +166,8 @@ const App = () => {
         </Toolbar>
       </StyledAppBar>
 
+      {/*---------shopping cart-------*/}
+
       <Drawer 
         anchor='right' 
         open={cartOpen} 
@@ -164,6 +182,8 @@ const App = () => {
         />
       </Drawer>
 
+      {/*---------Cheese Detail Dialog-------*/}
+
       <Dialog open={dialogOpen} onClose={()=>setDialogOpen(false)}>
         <ItemDetailDialog
           item={dialogItem}
@@ -173,18 +193,23 @@ const App = () => {
         />
       </Dialog>
 
+      {/*---------Purchase History Drawer-------*/}
+
       <Drawer anchor='left' open={showHistory} onClose={() => setShowHistory(false)}> 
         <HistoryRecords
           historyRecordsData = {historyRecordsData}
         />
       </Drawer>   
 
+      {/*---------No History Prompt-------*/}
       <PopUp
         open= {noHistoryPrompt}
         onClose = {setNoHistoryPrompt}
         title = {"Patient Zero's Cheeseria"}
         content = {"No purchase history found, popluate your chart with amazing cheese now :) !"}
       />
+
+      {/*---------Cheese Card-------*/}
 
       <Grid container spacing={3}>
         {data?.map(item => (
